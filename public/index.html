@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>GMap Test</title>
+	<style>
+	html, body, #map-div {
+		margin: 0;
+		padding: 0;
+		height: 100%;
+	}
+	</style>
+	<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCMQz_83Fc27KHZDyJWecP6_lMTIkUfRAY&sensor=false"></script>
+	<script src="./js/KineticGMapOverlay.js"></script>
+	<script type="text/javascript" src='./lib/kineticjs/kinetic-v4.5.2.js'></script>
+	<script>
+	// the kinetic overlay	
+	var overlay;    
+	
+	// init the map + overlay
+	function init() {
+        // initialize the map
+        var mapOptions = {
+        	zoom: 6,
+        	center: new google.maps.LatLng(-27.347374,153.014832),
+        	mapTypeId: google.maps.MapTypeId.ROADMAP,
+        	disableDefaultUI: true,
+        };
+        var mapDiv = document.getElementById('map-div');
+        var map = new google.maps.Map(mapDiv, mapOptions);
+        
+        // create the overlay
+        overlay = new KineticGMapOverlay(map, ready);
+    }
+
+    // called once the overlay is built so that objects can be added
+	function ready() {
+		var stage = overlay.getStage();
+		var layer = new Kinetic.Layer();
+		stage.add(layer);
+
+		// create a bunch of circles
+		var minX = -28.;
+		var minY = 152.;
+
+		var total = 500;
+		var dots = new Array(total);
+		var points = new Array(total);
+		var ovals = new Array(total);
+		var periods = new Array(total);
+		for(var i=0;i<total;i++){
+			points[i] = overlay.MapPoint(minX + Math.random()*2, minY + Math.random()*2);
+
+			ovals[i] = new Kinetic.Circle({
+				x: points[i].x,
+				y: points[i].y,
+				radius: 0.05,
+				fill: '#AA0000', 
+				opacity: 0.5         
+			});
+			layer.add(ovals[i]);
+
+			periods[i] = Math.random() * 10000 + 3000;
+		}
+
+		var amplitude = 0.5;
+
+		// set the composite for the layer
+		layer.getContext().globalCompositeOperation = 'lighter';
+
+		// animate the circles
+		var anim = new Kinetic.Animation(function(frame) {
+			for(var i=0;i<total;i++){
+				ovals[i].setX(amplitude * Math.sin(frame.time * 2 * Math.PI / periods[i]) + points[i].x);
+				ovals[i].setY(amplitude * Math.cos(frame.time * 2 * Math.PI / periods[i]) + points[i].y);
+			}
+		}, layer);
+
+		anim.start();
+	}
+
+    document.addEventListener('DOMContentLoaded', init, false);
+    </script>
+</head>
+<body>
+	<div id="map-div"></div>
+</body>
+</html>
