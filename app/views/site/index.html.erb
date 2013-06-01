@@ -1,0 +1,49 @@
+<script>
+  // the kinetic overlay  
+  var overlay;    
+  
+  // init the map + overlay
+  function init() {
+        // initialize the map
+        var mapOptions = {
+          zoom: 6,
+          center: new google.maps.LatLng(<%= @lat %>,<%= @long %>),
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          disableDefaultUI: true,
+        };
+        var mapDiv = document.getElementById('map-div');
+        var map = new google.maps.Map(mapDiv, mapOptions);
+        
+        // create the overlay
+        overlay = new KineticGMapOverlay(map, ready);
+    }
+
+    // called once the overlay is built so that objects can be added
+  function ready() {
+    var stage = overlay.getStage();
+    var layer = new Kinetic.Layer();
+    stage.add(layer);
+
+    <% @products.each_with_index do |product, i| %>
+      var point<%=i%> = overlay.MapPoint(<%= product['nearestLocation'].split(",").first %>, <%= product['nearestLocation'].split(",").last %>);
+
+      var ovals<%=i%> = new Kinetic.Circle({
+        x: point<%=i%>.x,
+        y: point<%=i%>.y,
+        radius: 0.05,
+        fill: '#AA0000', 
+        opacity: 0.5         
+      });
+      layer.add(ovals<%=i%>);
+
+    <% end %>
+
+    // set the composite for the layer
+    layer.getContext().globalCompositeOperation = 'lighter';
+
+  }
+
+    document.addEventListener('DOMContentLoaded', init, false);
+    </script>
+
+    <div id="map-div"></div>

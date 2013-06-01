@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>GMap Test</title>
+  <style>
+  html, body, #map-div {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+  </style>
+  <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCMQz_83Fc27KHZDyJWecP6_lMTIkUfRAY&sensor=false"></script>
+
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+
+</head>
+<body>
+  <%= yield %>
+</body>
+</html>
