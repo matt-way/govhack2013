@@ -1,0 +1,34 @@
+html,body,#map-div{margin:0;padding:0;height:100%}#header{height:50px;width:100%;background-color:#00f}
+
+#itin {
+
+	position: fixed;
+	right: 0;
+	top: 10em;
+    transition: padding 0.15s, box-shadow 0.3s, margin-right 0.15s cubic-bezier(0, 1.12, 0.39, 0.98) 0s;
+    margin-right: -180px;
+    width: 250px;
+    /*background: rgb(220,220,220);*/
+    z-index: 900;
+    box-shadow: 1px 1px 1px #aaa;
+
+}
+
+#itin:hover {
+	margin-right:10px;
+	box-shadow: 2px 2px 2px #999;
+}
+
+#itin .nav-header {
+	font-size: 12px;
+}
+
+#itin.well {padding: 0;}
+
+#itin:hover li a, #itin li.nav-header {
+	padding: 12px; 
+}
+
+#itin:hover .nav-header {
+	font-size: 20px;
+}

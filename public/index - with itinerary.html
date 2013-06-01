@@ -1,0 +1,65 @@
+<!doctype html>
+<html ng-app>
+<head>
+	<meta charset="utf-8">
+	<title>GMap Test</title>
+	<link rel="stylesheet" type="text/css" href="./css/styles.css">
+	<link rel="stylesheet" type="text/css" href="./lib/bootstrap/css/bootstrap.css">
+	<script src='./lib/jquery/jquery-2.0.2.min.js'></script>
+	<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCMQz_83Fc27KHZDyJWecP6_lMTIkUfRAY&sensor=false"></script>
+	<script src="./js/KineticGMapOverlay.js"></script>
+	<script type="text/javascript" src='./lib/kineticjs/kinetic-v4.5.2.js'></script>
+	<script type="text/javascript" src = './lib/bootstrap/js/bootstrap.min.js'></script>
+	<script type="text/javascript" src="./lib/angular/angular.js"></script>
+	<script type="text/javascript" src='./js/game.js'></script>
+	<script>
+	// the kinetic overlay	
+	var overlay;   
+
+	// create the game based on the data
+	var url = 'http://govhack.atdw.com.au/productsearchservice.svc/products?key=278965474541&latlong=-27.477512,153.029324&dist=15&facets=cats&pge=1&size=1000&out=json';
+	var myGame = new Game(url); 
+	
+	// init the map + overlay
+	function init() {
+        // initialize the map
+        var mapOptions = {
+        	zoom: 11,
+        	center: new google.maps.LatLng(-27.47538,153.051224),
+        	mapTypeId: google.maps.MapTypeId.ROADMAP,
+        	disableDefaultUI: true,
+        };
+        var mapDiv = document.getElementById('map-div');
+        var map = new google.maps.Map(mapDiv, mapOptions);
+        
+        // create the overlay
+        overlay = new KineticGMapOverlay(map, ready);
+    }
+
+    // called once the overlay is built so that objects can be added
+	function ready() {		
+		myGame.load(overlay);
+	}
+
+	document.addEventListener('DOMContentLoaded', init, false);
+    </script>
+</head>
+<body>
+	
+
+
+	<div id="itin">
+	<ul class="nav nav-list">
+  <li class="nav-header">Itinerary</li>
+  <li class="active"><a href="#">Item 1</a></li>
+  <li><a href="#">Item 2</a></li>
+  <li><a href="#">Item 3</a></li>
+  <li><a href="#">Item 4</a></li>
+  </ul>
+
+
+	</div>
+	<div id='header'></div>
+	<div id="map-div"></div>	
+</body>
+</html>
