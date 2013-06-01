@@ -2,20 +2,25 @@
 <html ng-app>
 <head>
 	<meta charset="utf-8">
-	<title>GMap Test</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>Travelhackz - travel rewarded beyond your destinations</title>
 	<link rel="stylesheet" type="text/css" href="./css/styles.css">
+	<link rel="stylesheet" type="text/css" href="./lib/bootstrap/css/bootstrap.css">
 	<script src='./lib/jquery/jquery-2.0.2.min.js'></script>
 	<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCMQz_83Fc27KHZDyJWecP6_lMTIkUfRAY&sensor=false"></script>
 	<script src="./js/KineticGMapOverlay.js"></script>
 	<script type="text/javascript" src='./lib/kineticjs/kinetic-v4.5.2.js'></script>
 	<script type="text/javascript" src="./lib/angular/angular.js"></script>
 	<script type="text/javascript" src='./js/game.js'></script>
+	<script type="text/javascript" src='./lib/bootstrap/js/bootstrap.min.js'></script>
 	<script>
 	// the kinetic overlay	
 	var overlay;   
 
 	// create the game based on the data
-	var url = 'http://govhack.atdw.com.au/productsearchservice.svc/products?key=278965474541&latlong=-27.477512,153.029324&dist=15&facets=cats&pge=1&size=1000&out=json';
+	var url = 'http://govhack.atdw.com.au/productsearchservice.svc/products?key=278965474541&latlong=-27.477512,153.029324&dist=5&facets=cats&pge=1&size=1000&out=json';
 	var myGame = new Game(url); 
 	
 	// init the map + overlay
@@ -43,7 +48,40 @@
     </script>
 </head>
 <body>
-	<div id='header'></div>
-	<div id="map-div"></div>	
-</body>
+	<div class="page-header">
+  <h1>TravelHackz <small>Journey your reward</small></h1>
+<input type="text" data-provide="typeahead">
+<div class="dropdown">
+  <a class="dropdown-toggle" data-toggle="dropdown" href="#">Dropdown trigger</a>
+  <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+  </ul>
+</div>
+
+
+</div>
+	
+	
+	<aside id="sidebar">
+		
+		
+<ul class="nav nav-list">
+  <li class="nav-header">Categories</li>
+  <li class="active"><a href="#">Home</a></li>
+  <li><a href="#">Journeys</a></li>
+  <li><a href="#">Attractions</a></li>
+  <li><a href="#">Accommodation</a></li>
+  <li><a href="#">Food</a></li>
+  <li><a href="#">Events</a></li>
+  <li><a href="#">Tour</a></li>
+</ul>
+
+	</aside>
+	<div id="map-div"></div><!--Body content-->  <!--Body content-->
+	
+
+
+
+
+	
+	</body>
 </html>

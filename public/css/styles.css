@@ -1,1 +1,23 @@
-html,body,#map-div{margin:0;padding:0;height:100%}#header{height:50px;width:100%;background-color:#00f}
+html, body {
+	margin:0;
+	padding:0;
+	height:100%;
+}
+#header{
+	height:50px;
+	width:100%;
+	background-color:#00f;
+}
+
+#map-div {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	float: left;
+	width: 80%;
+}
+
+#sidebar {
+	float:left;
+	width: 20%;
+}
