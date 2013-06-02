@@ -50,10 +50,10 @@
 		myGame.load(overlay);
 		myGame.sliderChanged(0.007);
 
-		var $test = $('#cat');
-		console.log($test.length);
-		$('#cat').click(function(){
-        	console.log('got you');
+		$('.cat').click(function(){
+			// toggle active class			
+			myGame.toggleCat($(this).text(),!($(this).parent().hasClass('active')));
+			$(this).parent().toggleClass('active');
         });
 	}
 
@@ -87,12 +87,12 @@
 <ul class="nav nav-list">
   <li class="nav-header">Categories</li>
   <!--<li class="active"><a href="#">Home</a></li>-->
-  <li class="active"><a class="cat" href="#">Journeys</li>
+  <li class="active"><a class="cat" href="#">Restaurants</a></li>
   <li class="active"><a class="cat" href="#">Attractions</a></li>
   <li class="active"><a class="cat" href="#">Accommodation</a></li>
-  <li class="active"><a class="cat" href="#">Food</a></li>
   <li class="active"><a class="cat" href="#">Events</a></li>
-  <li class="active"><a class="cat" href="#">Tour</a></li>
+  <li class="active"><a class="cat" href="#">Tours</a></li>
+  <li class="active"><a class="cat" href="#">Journeys</a></li>
 </ul>
 
 <div id='sliderhouse'>

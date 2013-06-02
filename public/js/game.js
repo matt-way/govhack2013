@@ -13,10 +13,14 @@ var ItemPoint = function(_game, _product, _details) {
 
 	this.icon_ = _details.catinfo['icon'];
 
+	this.cat_ = _details.catid;
+
 	this.visible_ = true;
 
 	this.marker_ = null;
 	this.circle_ = null;
+
+	this.overlay_ = null;
 	
 	this.latlong_ = new google.maps.LatLng(_details.lat, _details.lng);
 	this.loc_ = null;		
@@ -34,6 +38,7 @@ function infoclick(){
 
 ItemPoint.prototype.init = function(_overlay, _layer) {
 
+	this.overlay_ = _overlay;
 	this.loc_ = _overlay.MapPoint(this.latlong_.lat(), this.latlong_.lng());
 
 	this.marker_ = new google.maps.Marker({
@@ -68,7 +73,7 @@ ItemPoint.prototype.init = function(_overlay, _layer) {
 						 '<div id="pdesc">' + mContent.desc_ + '</div>';
 		if(!mContent.chosen_){					
 			//contString += '<div id="pchoose" class="btn">Add to Itinerary</div>';
-			contString += '<input type="button" onclick="infoclick()" value="test">';
+			contString += '<input type="button" onclick="infoclick()" value="Add to Itinerary">';
 		}
 		mContent.game_.infoWindow_.setContent(contString);		
 		mContent.game_.infoWindow_.open(_overlay.map_, this);		
@@ -109,31 +114,43 @@ this.catInfo_ = {
 		'colour' : 'red',
 		'colourVal' : '#FF0000',
 		'icon' : 'http://maps.google.com/intl/en_us/mapfiles/ms/micons/red.png',
+		'label' : 'Restaurants',
+		'state' : true
 	},
 	'ATTRACTION' : {
 		'colour' : 'green',
 		'colourVal' : '#00FF00',
 		'icon' : 'http://maps.google.com/intl/en_us/mapfiles/ms/micons/green.png',
+		'label' : 'Attractions',
+		'state' : true
 	},
 	'ACCOM' : {
 		'colour' : 'blue',
 		'colourVal' : '#0000FF',		
 		'icon' : 'http://maps.google.com/intl/en_us/mapfiles/ms/micons/blue.png',
+		'label' : 'Accommodation',
+		'state' : true	
 	},
 	'EVENT' : {
 		'colour' : 'purple',
 		'colourVal' : '#9000ff',
 		'icon' : 'http://maps.google.com/intl/en_us/mapfiles/ms/micons/purple.png',
+		'label' : 'Events',
+		'state' : true
 	},
 	'TOUR' : {
 		'colour' : 'orange',
 		'colourVal' : '#ffa800',
 		'icon' : 'http://maps.google.com/intl/en_us/mapfiles/ms/micons/orange.png',
+		'label' : 'Tours',
+		'state' : true
 	},
 	'JOURNEY' : {
 		'colour' : 'yellow',
 		'colourVal' : '#FFFF00',
 		'icon' : 'http://maps.google.com/intl/en_us/mapfiles/ms/micons/yellow.png',
+		'label' : 'Journeys',
+		'state' : true
 	},
 	/*'HIRE' : {
 
@@ -152,6 +169,7 @@ this.catInfo_ = {
 
 	this.curSelection_ = null;
 	this.stage_ = null;
+	this.overlay_ = null;
 
 	this.curSliderValue_ = 0.007;
 
@@ -185,6 +203,7 @@ this.catInfo_ = {
 				{ lat: locs[0], lng: locs[1],
 				  catinfo: info,
 				  radius: 0.007,
+				  catid: products[i]['productCategoryId']
 				});
 
 			// add to the correct layer
@@ -199,6 +218,31 @@ this.catInfo_ = {
 	}
 };
 
+
+Game.prototype.toggleCat = function(_cat, _show){
+
+	var pos = this.curSelection_.latlong_;
+	// go through each marker
+	for(var i=0;i<this.markerList_.length;i++){
+		// if it is in the given category
+		if(this.catInfo_[this.markerList_[i].cat_]['label'] == _cat){
+			if(_show){
+				// if it is inside the circle
+				var target = this.markerList_[i].latlong_;
+				var dist = google.maps.geometry.spherical.computeDistanceBetween(pos, target);
+		
+				if(dist < this.curSliderValue_ * 130000){
+					this.markerList_[i].showMarker();
+				}
+			}else{
+				this.markerList_[i].hideMarker();
+			}
+
+			this.catInfo_[this.markerList_[i].cat_]['state'] = _show;
+		}
+	}
+}
+
 Game.prototype.getData = function(){
 	return this.data_;
 }
@@ -212,6 +256,8 @@ Game.prototype.selectMarker = function(_marker){
 	_marker.showMarker();
 	_marker.showCircle();	
 
+	this.overlay_.map_.panTo(_marker.latlong_);
+
 	// add marker to itinaray lis
 	$('#itinlist .active').removeClass('active');
 	$('#itinlist').append('<li class="active"><a href="#">' + _marker.name_ + '</a></li>');
@@ -222,6 +268,7 @@ Game.prototype.selectMarker = function(_marker){
 
 Game.prototype.load = function(_overlay) {
 
+	this.overlay_ = _overlay;
 	this.stage_ = _overlay.getStage();
 	var layer = new Kinetic.Layer();
 	this.stage_.add(layer);
@@ -251,7 +298,9 @@ Game.prototype.sliderChanged = function(_value){
 
 		var dist = google.maps.geometry.spherical.computeDistanceBetween(pos, target);
 		
-		if(dist < _value * 130000){
+		var shouldShow = this.catInfo_[this.markerList_[i].cat_]['state'];
+
+		if(dist < _value * 130000 && shouldShow){
 			this.markerList_[i].showMarker();
 		}else{
 			this.markerList_[i].hideMarker();
