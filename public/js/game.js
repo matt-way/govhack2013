@@ -75,7 +75,8 @@ ItemPoint.prototype.init = function(_overlay, _layer) {
 		y: this.loc_.y,
 		radius: this.radius_,
 		fill: this.colourVal_, 
-		opacity: 0.5         
+		opacity: 0.5,
+		visible: false        
 	});
 	_layer.add(this.circle_);	
 
@@ -94,6 +95,10 @@ ItemPoint.prototype.init = function(_overlay, _layer) {
 		mContent.game_.infoWindow_.setContent(contString);		
 		mContent.game_.infoWindow_.open(_overlay.map_, this);
 	});
+}
+
+ItemPoint.prototype.showCircle = function(){
+	this.circle_.show();
 }
 
 ItemPoint.prototype.setColour = function(_colour){
@@ -146,7 +151,7 @@ function Game(_url){
 			this.layers_['productCategoryId'].push(point);	
 		
 			// add to global list
-			this.markerList_.push(point)
+			this.markerList_.push(point);			
 		}
 	}
 };
@@ -162,6 +167,10 @@ Game.prototype.load = function(_overlay) {
 	stage.add(layer);
 
 	for(var i=0;i<this.markerList_.length;i++){
-		this.markerList_[i].init(_overlay, layer);		
+		this.markerList_[i].init(_overlay, layer);
+		if(i==0){
+			this.markerList_[i].showMarker();
+			this.markerList_[i].showCircle();
+		}		
 	}
 }
