@@ -1,14 +1,86 @@
-<div class="mapDiv" lat='<%= @center[0]%>' lng='<%= @center[1]%>'>
+<script>
+  // the kinetic overlay  
+  var overlay;   
 
-  <div id="map_canvas" style="width:100%; height:100%;" class="left"></div>
-  <div id="userOptions">
-    <% if current_user and current_user.image %>
-        <%= image_tag current_user.image %>
-    <% end %>
-  </div>
+  // create the game based on the data
+  var url = '/api/product.json';
+  var myGame = new Game(url); 
+  
+  // init the map + overlay
+  function init() {
+        // initialize the map
+        var mapOptions = {
+          zoom: 15,
+          center: new google.maps.LatLng(-27.477407093,153.029079437),
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          disableDefaultUI: true,
+        };
+        var mapDiv = document.getElementById('map-div');
+        var map = new google.maps.Map(mapDiv, mapOptions);
+        
+        // create the overlay
+        overlay = new KineticGMapOverlay(map, ready);
 
-  <div id="street_view" class="right onTop"></div>
-  <div id="movie_info" style="width:100%; height:100%;" class="right onTop"></div>
-  <div id="close"><img src = "https://www.gowallet.com/content/images/iconClose2x.png"></div>
+        $('#radslider').slider().on('slide', function(ev){
+          myGame.sliderChanged(ev.value);
+        });
+    }
+
+    // called once the overlay is built so that objects can be added
+  function ready() {    
+    myGame.load(overlay);
+    myGame.sliderChanged(0.007);
+
+    $('.cat').click(function(){
+      // toggle active class      
+      myGame.toggleCat($(this).text(),!($(this).parent().hasClass('active')));
+      $(this).parent().toggleClass('active');
+        });
+  }
+
+  document.addEventListener('DOMContentLoaded', init, false);
+    </script>
+
+
+  <div class="pheader">
+  <h1>TravelHackz <small>Journey your reward</small></h1>
 
 </div>
+
+  <div class="well" id="itin">
+  <ul id='itinlist' class="nav nav-list">
+  <li class="nav-header">Itinerary</li>
+  <!--<li class="active"><a href="#">Item 1</a></li>
+  <!--
+  <li><a href="#">Item 2</a></li>
+  <li><a href="#">Item 3</a></li>
+  <li><a href="#">Item 4</a></li>
+  -->
+  </ul>
+
+
+  </div>  
+  
+  
+  <aside id="sidebar">
+    
+    
+<ul class="nav nav-list">
+  <li class="nav-header">Categories</li>
+  <!--<li class="active"><a href="#">Home</a></li>-->
+  <li class="active"><a class="cat" href="#">Restaurants</a></li>
+  <li class="active"><a class="cat" href="#">Attractions</a></li>
+  <li class="active"><a class="cat" href="#">Accommodation</a></li>
+  <li class="active"><a class="cat" href="#">Events</a></li>
+  <li class="active"><a class="cat" href="#">Tours</a></li>
+  <li class="active"><a class="cat" href="#">Journeys</a></li>
+</ul>
+
+<div id='sliderhouse'>
+<input id='radslider' type="text" class="span2" value="" data-slider-min="0.001" data-slider-max="0.03" data-slider-step="0.0005" data-slider-value="0.007" data-slider-orientation="horizontal" data-slider-selection="after"data-slider-tooltip="hide">
+</div>
+  </aside>
+
+
+  <div id="map-div"></div><!--Body content-->  <!--Body content-->
+  

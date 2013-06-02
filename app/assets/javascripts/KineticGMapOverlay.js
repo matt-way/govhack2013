@@ -41,11 +41,20 @@ KineticGMapOverlay.prototype.getStage = function() {
   return this.stage_;
 }
 
+/*
+google.maps.event.addListener(map, 'idle', function() {
+   // Get projection
+   projection = overlay.getProjection();
+})
+*/
+
 // Get correct points by doing a lat/long conversion
 KineticGMapOverlay.prototype.MapPoint = function(_x, _y){
   var latlong = new google.maps.LatLng(_x, _y);
   var mapProjection = this.map_.getProjection();
-  return mapProjection.fromLatLngToPoint(latlong);
+  var worldPoint = mapProjection.fromLatLngToPoint(latlong);
+  return new google.maps.Point(worldPoint.x, worldPoint.y);
+  //return new google.maps.Point(worldPoint.x, worldPoint.y+0.27);  
 }
 
 /**
@@ -106,6 +115,7 @@ KineticGMapOverlay.prototype.onAdd = function() {
   // We add an overlay to a map via one of the map's panes.
   // We'll add this overlay to the overlayImage pane.
   var panes = this.getPanes();
+  //panes.overlayLayer.appendChild(div);
   panes.overlayLayer.appendChild(div);
 
   // hook the map events
@@ -131,7 +141,8 @@ KineticGMapOverlay.prototype.repositionEvent_ = function() {
   this.reposition_();
 }
 
-KineticGMapOverlay.prototype.clickEvent_ = function() {
+KineticGMapOverlay.prototype.clickEvent_ = function(evt) {
+  console.log(evt);
   if(this.clickHandler_){
     this.clickHandler_();
   }
