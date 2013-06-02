@@ -20,6 +20,7 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
+gem 'intercom-rails', '~> 0.2.21'
 gem 'jquery-rails'
 gem 'mechanize'
 

@@ -23,7 +23,7 @@
     <script type="text/javascript">
 
       var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-36250216-1']);
+      _gaq.push(['_setAccount', 'UA-41376260-1']);
       _gaq.push(['_trackPageview']);
 
       (function() {
@@ -34,32 +34,5 @@
 
     </script>
 
-    <% if current_user.present? %>
-      <script id="IntercomSettingsScriptTag">
-        var intercomSettings = {
-          app_id: 'jqyg4ao7',
-          email: '<%= current_user.email %>',
-          created_at: <%= current_user.created_at.to_i %> 
-        };
-      </script>
-      <script>
-        (function() {
-          var i=function(){i.c(arguments)};i.q=[];
-          i.c=function(args){i.q.push(args)};window.Intercom=i;
-          function async_load() {
-            var s = document.createElement('script');
-            s.type = 'text/javascript'; s.async = true;
-            s.src = 'https://api.intercom.io/api/js/library.js';
-            var x = document.getElementsByTagName('script')[0];
-            x.parentNode.insertBefore(s, x);
-          }
-          if (window.attachEvent) {
-            window.attachEvent('onload', async_load);
-          } else {
-            window.addEventListener('load', async_load, false);
-          }
-        })();
-      </script>
-    <% end %>
   </body>
 </html>
