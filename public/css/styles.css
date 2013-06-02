@@ -40,13 +40,28 @@
 
 */
 
+#sliderhouse {
+	margin: 10px;
+}
+
+.slider {
+	width: 240px !important;
+}
+
+#popimg {
+	height: 100px;
+}
 
 
 #map-div img {
     max-width: none;
 }
 
-
+.pheader {
+	height: 50px;
+	padding: 5px;
+	border-bottom: 1px solid #eeeeee;
+}
 
 
 
@@ -105,4 +120,8 @@ html, body {
 
 #itin:hover .nav-header {
 	font-size: 20px;
+}
+
+#radslider {
+	margin-left: 10px;
 }

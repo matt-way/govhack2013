@@ -22,6 +22,16 @@ var ItemPoint = function(_game, _product, _details) {
 	this.loc_ = null;		
 }
 
+function infoclick(){
+	myGame.infoWindow_.close();
+	if(!myGame.tempSel){
+		return;
+	}
+	myGame.selectMarker(myGame.tempSel);
+	myGame.sliderChanged(0.007);
+	myGame.stage_.draw();
+}
+
 ItemPoint.prototype.init = function(_overlay, _layer) {
 
 	this.loc_ = _overlay.MapPoint(this.latlong_.lat(), this.latlong_.lng());
@@ -39,7 +49,7 @@ ItemPoint.prototype.init = function(_overlay, _layer) {
 		y: this.loc_.y,
 		radius: this.radius_,
 		fill: this.colourVal_, 
-		opacity: 0.2,
+		opacity: 0.3,
 		stroke: this.colourVal_,
 		strokeWidth: 0.0005,
 		visible: false        
@@ -51,15 +61,17 @@ ItemPoint.prototype.init = function(_overlay, _layer) {
 	google.maps.event.addListener(this.marker_, 'click', function(evt){
 		// show the detail info, except if the marker has already been chosen, do show the add button
 		var mContent = this.get('mContent');
+		myGame.tempSel = mContent;
 
 		var contString = '<div id="pname">' + mContent.name_ + '</div>' +
-						 '<img height="100" src="' + mContent.img_ + '"/>' +
+						 '<img id="popimg" height="100" src="' + mContent.img_ + '"/>' +
 						 '<div id="pdesc">' + mContent.desc_ + '</div>';
 		if(!mContent.chosen_){					
-			contString += '<div id="pchoose" class="btn">Choose</div>';
+			//contString += '<div id="pchoose" class="btn">Add to Itinerary</div>';
+			contString += '<input type="button" onclick="infoclick()" value="test">';
 		}
 		mContent.game_.infoWindow_.setContent(contString);		
-		mContent.game_.infoWindow_.open(_overlay.map_, this);
+		mContent.game_.infoWindow_.open(_overlay.map_, this);		
 	});
 }
 
@@ -74,6 +86,11 @@ ItemPoint.prototype.hideCircle = function(){
 }
 ItemPoint.prototype.hideMarker = function(){
 	this.marker_.setVisible(false);
+}
+
+ItemPoint.prototype.select = function(){
+	var blackIcon = 'http://maps.google.com/mapfiles/marker_black.png';
+	this.marker_.setIcon(blackIcon);
 }
 
 ItemPoint.prototype.setColour = function(_colour){
@@ -136,6 +153,8 @@ this.catInfo_ = {
 	this.curSelection_ = null;
 	this.stage_ = null;
 
+	this.curSliderValue_ = 0.007;
+
 	this.data_ = null;
 	var that = this;
 	$.ajax({
@@ -184,6 +203,23 @@ Game.prototype.getData = function(){
 	return this.data_;
 }
 
+Game.prototype.selectMarker = function(_marker){
+	if(this.curSelection_){	
+		this.curSelection_.hideCircle();
+	}	
+	this.curSelection_ = _marker;
+	_marker.select();
+	_marker.showMarker();
+	_marker.showCircle();	
+
+	// add marker to itinaray lis
+	$('#itinlist .active').removeClass('active');
+	$('#itinlist').append('<li class="active"><a href="#">' + _marker.name_ + '</a></li>');
+
+	//this.sliderChanged(0.007);
+	this.stage_.draw();	
+}
+
 Game.prototype.load = function(_overlay) {
 
 	this.stage_ = _overlay.getStage();
@@ -193,9 +229,7 @@ Game.prototype.load = function(_overlay) {
 	for(var i=0;i<this.markerList_.length;i++){
 		this.markerList_[i].init(_overlay, layer);
 		if(i==0){
-			this.markerList_[i].showMarker();
-			this.markerList_[i].showCircle();
-			this.curSelection_ = this.markerList_[i];
+			this.selectMarker(this.markerList_[i]);
 		}		
 	}
 }
@@ -217,7 +251,7 @@ Game.prototype.sliderChanged = function(_value){
 
 		var dist = google.maps.geometry.spherical.computeDistanceBetween(pos, target);
 		
-		if(dist < _value * 10000){
+		if(dist < _value * 130000){
 			this.markerList_[i].showMarker();
 		}else{
 			this.markerList_[i].hideMarker();
@@ -225,4 +259,6 @@ Game.prototype.sliderChanged = function(_value){
 	}
 
 	this.stage_.draw();
+
+	this.curSliderValue_ = _value;
 }

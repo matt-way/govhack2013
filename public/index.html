@@ -48,44 +48,59 @@
     // called once the overlay is built so that objects can be added
 	function ready() {		
 		myGame.load(overlay);
+		myGame.sliderChanged(0.007);
+
+		var $test = $('#cat');
+		console.log($test.length);
+		$('#cat').click(function(){
+        	console.log('got you');
+        });
 	}
 
 	document.addEventListener('DOMContentLoaded', init, false);
     </script>
 </head>
 <body>
-	<div class="page-header">
+	<div class="pheader">
   <h1>TravelHackz <small>Journey your reward</small></h1>
 
 </div>
 
 	<div class="well" id="itin">
-	<ul class="nav nav-list">
+	<ul id='itinlist' class="nav nav-list">
   <li class="nav-header">Itinerary</li>
-  <li class="active"><a href="#">Item 1</a></li>
+  <!--<li class="active"><a href="#">Item 1</a></li>
+  <!--
   <li><a href="#">Item 2</a></li>
   <li><a href="#">Item 3</a></li>
   <li><a href="#">Item 4</a></li>
+	-->
   </ul>
 
 
 	</div>	
+	
 	
 	<aside id="sidebar">
 		
 		
 <ul class="nav nav-list">
   <li class="nav-header">Categories</li>
-  <li class="active"><a href="#">Home</a></li>
-  <li><a href="#">Journeys</a></li>
-  <li><a href="#">Attractions</a></li>
-  <li><a href="#">Accommodation</a></li>
-  <li><a href="#">Food</a></li>
-  <li><a href="#">Events</a></li>
-  <li><a href="#">Tour</a></li>
+  <!--<li class="active"><a href="#">Home</a></li>-->
+  <li class="active"><a class="cat" href="#">Journeys</li>
+  <li class="active"><a class="cat" href="#">Attractions</a></li>
+  <li class="active"><a class="cat" href="#">Accommodation</a></li>
+  <li class="active"><a class="cat" href="#">Food</a></li>
+  <li class="active"><a class="cat" href="#">Events</a></li>
+  <li class="active"><a class="cat" href="#">Tour</a></li>
 </ul>
+
+<div id='sliderhouse'>
 <input id='radslider' type="text" class="span2" value="" data-slider-min="0.001" data-slider-max="0.03" data-slider-step="0.0005" data-slider-value="0.007" data-slider-orientation="horizontal" data-slider-selection="after"data-slider-tooltip="hide">
+</div>
 	</aside>
+
+
 	<div id="map-div"></div><!--Body content-->  <!--Body content-->
 	
 
