@@ -214,7 +214,15 @@ KineticGMapOverlay.prototype.draw = function() {
 
   var projection = this.getProjection();
   var divTopLeft = projection.fromLatLngToDivPixel(this.topLeft_);  
-  canvas.getElement().style[KineticGMapOverlay.CSS_TRANSFORM_] = 'translate(' + Math.round(divTopLeft.x) + 'px,' + Math.round(divTopLeft.y) + 'px)';  
+  //canvas.getElement().style[KineticGMapOverlay.CSS_TRANSFORM_] = 'translate(' + Math.round(divTopLeft.x) + 'px,' + Math.round(divTopLeft.y) + 'px)';  
+  var $can = $(canvas.getElement());
+  //transform: translate(50px,100px);
+//-ms-transform: translate(50px,100px); /* IE 9 */
+//-webkit-transform: translate(50px,100px); /* Safari and Chrome */
+  var trans = 'translate(' + Math.round(divTopLeft.x) + 'px,' + Math.round(divTopLeft.y) + 'px)';
+  $can.css('transform', trans);
+  $can.css('-ms-transform', trans);
+  $can.css('-webkit-transform', trans);
   
   // update the canvas so match the map offsets + zoom
   var context = canvas.getContext();  
