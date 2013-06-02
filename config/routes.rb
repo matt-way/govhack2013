@@ -1,5 +1,7 @@
 Govhack2013::Application.routes.draw do
   get "site/index"
+  get "site/welcome"
+
 
   scope "api" do
     resources :product
