@@ -37,3 +37,12 @@ gem 'mechanize'
 
 # To use debugger
 # gem 'debugger'
+
+# Omniauth strategies
+gem 'omniauth-google'
+gem 'omniauth-twitter'
+gem 'omniauth-facebook'
+gem 'omniauth-google'
+
+# Facebook integration
+gem 'koala'

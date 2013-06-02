@@ -1,23 +1,74 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>GMap Test</title>
-  <style>
-  html, body, #map-div {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-  }
-  </style>
-  <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCMQz_83Fc27KHZDyJWecP6_lMTIkUfRAY&sensor=false"></script>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+ 
+   <title>Ontheset</title>
 
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= javascript_include_tag "application" %>
-  <%= csrf_meta_tags %>
+    <meta property="og:image" content="<%=  @image_src %>" /> 
+    <meta property="og:title" content="<%= @title %>" />
+    <meta property="og:description" content="<%= @description %>" />
+   
+   
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCMQz_83Fc27KHZDyJWecP6_lMTIkUfRAY&sensor=true">
+    </script>
 
-</head>
-<body>
-  <%= yield %>
-</body>
+    <link rel="icon" href="<%= asset_path("icon.png")%>" type="image/png" />
+
+
+    <%= stylesheet_link_tag    "application", :media => "all" %>
+    <%= javascript_include_tag "application" %>
+    <%= csrf_meta_tags %>
+
+
+  </head>
+  
+  <body>
+    <%= yield %>
+
+    <!--<div id='infoWindow'></div>-->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-36250216-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+
+    <% if current_user.present? %>
+      <script id="IntercomSettingsScriptTag">
+        var intercomSettings = {
+          app_id: 'jqyg4ao7',
+          email: '<%= current_user.email %>',
+          created_at: <%= current_user.created_at.to_i %> 
+        };
+      </script>
+      <script>
+        (function() {
+          var i=function(){i.c(arguments)};i.q=[];
+          i.c=function(args){i.q.push(args)};window.Intercom=i;
+          function async_load() {
+            var s = document.createElement('script');
+            s.type = 'text/javascript'; s.async = true;
+            s.src = 'https://api.intercom.io/api/js/library.js';
+            var x = document.getElementsByTagName('script')[0];
+            x.parentNode.insertBefore(s, x);
+          }
+          if (window.attachEvent) {
+            window.attachEvent('onload', async_load);
+          } else {
+            window.addEventListener('load', async_load, false);
+          }
+        })();
+      </script>
+    <% end %>
+  </body>
 </html>
