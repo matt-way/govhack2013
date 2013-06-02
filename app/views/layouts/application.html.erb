@@ -1,27 +1,18 @@
-<!DOCTYPE html>
-<html>
+
+<!doctype html>
+<html ng-app>
 <head>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
- 
-   <title>Ontheset</title>
+  <meta charset="utf-8">
 
-    <meta property="og:image" content="<%=  @image_src %>" /> 
-    <meta property="og:title" content="<%= @title %>" />
-    <meta property="og:description" content="<%= @description %>" />
-   
-   
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
-    <script type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCMQz_83Fc27KHZDyJWecP6_lMTIkUfRAY&sensor=true">
-    </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="icon" href="<%= asset_path("icon.png")%>" type="image/png" />
+  <title>Travelhackz - travel rewarded beyond your destinations</title>
 
+<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCMQz_83Fc27KHZDyJWecP6_lMTIkUfRAY&sensor=false&libraries=geometry"></script>
 
     <%= stylesheet_link_tag    "application", :media => "all" %>
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
-
 
   </head>
   
