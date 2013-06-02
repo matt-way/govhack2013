@@ -26,6 +26,9 @@ class SiteController < ApplicationController
     @ret = JSON.parse(content)
   end
 
+  def privacy
+  end
+
   def types
 
     url = "http://govhack.atdw.com.au/productsearchservice.svc/producttypes?key=278965474541&cats=ACCOMM,EVENT,ATTRACTION"

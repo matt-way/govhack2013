@@ -1,6 +1,7 @@
 Govhack2013::Application.routes.draw do
   get "site/index"
   get "site/welcome"
+  get "site/privacy"
 
 
   scope "api" do
