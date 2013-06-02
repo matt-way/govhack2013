@@ -1,0 +1,46 @@
+<style>
+html { 
+  background: url(<%= asset_path("govhack2013.jpg")%>) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+div.roundedCornersDiv
+{
+  width: 280px;
+  height: 478px;
+  padding: 0;
+  background-color: white;
+  -moz-border-radius: 7px;
+  -webkit-border-radius: 7px;
+  border-radius: 7px;
+  margin-left: 100px;
+  margin-top: 50px;
+}
+
+</style>
+<div class="roundedCornersDiv">
+<h1>On The Set #Battle4Charles</h1>
+
+<p>Sign in with <%= link_to "facebook", "/auth/facebook", :class=>"fb-signup"%></p>
+
+<p><a href="#" target=_blank>learn more...</a></p>
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=513508738659534";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<div class="fb-like" data-href="http://facebook.com/getontheset" data-send="true" data-width="450" data-show-faces="true"></div>
+
+<h2>Take our survey</h2>
+
+<p><a href="http://t.co/ln4GHxsY" target=_blank><img src="https://dl.dropbox.com/u/4482603/ontheset.qrcode"/></a></p>
+
+</div>
+
+</div>
