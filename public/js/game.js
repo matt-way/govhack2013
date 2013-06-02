@@ -1,43 +1,3 @@
-var catInfo = {
-	'RESTAURANT' : {
-		'colour' : 'red',
-		'colourVal' : '#FF0000'
-	},
-	'ATTRACTION' : {
-		'colour' : 'green',
-		'colourVal' : '#00FF00'
-	},
-	'ACCOM' : {
-		'colour' : 'blue',
-		'colourVal' : '#0000FF'			
-	},
-	'EVENT' : {
-		'colour' : 'purple',
-		'colourVal' : '#9000ff'
-	},
-	'TOUR' : {
-		'colour' : 'orange',
-		'colourVal' : '#ffa800'
-	},
-	'JOURNEY' : {
-		'colour' : 'yellow',
-		'colourVal' : '#FFFF00'
-	},
-	/*'HIRE' : {
-
-	},
-	
-	'INFO' : {
-
-	},
-	'DESTINFO' : {
-
-	},
-	'TRANSPORT' : {
-
-	}*/
-};
-
 var ItemPoint = function(_game, _product, _details) {
 	this.game_ = _game;
 
@@ -50,6 +10,8 @@ var ItemPoint = function(_game, _product, _details) {
 
 	this.colour_ = _details.catinfo['colour'];
 	this.colourVal_ = _details.catinfo['colourVal'];
+
+	this.icon_ = _details.catinfo['icon'];
 
 	this.visible_ = true;
 
@@ -67,15 +29,19 @@ ItemPoint.prototype.init = function(_overlay, _layer) {
 	this.marker_ = new google.maps.Marker({
       		position: this.latlong_,
       		map: _overlay.map_,
-      		title: this.title_
+      		title: this.title_,
+      		visible: false,
+      		icon: this.icon_
   	});
-
+	
   	this.circle_ = new Kinetic.Circle({
 		x: this.loc_.x,
 		y: this.loc_.y,
 		radius: this.radius_,
 		fill: this.colourVal_, 
-		opacity: 0.5,
+		opacity: 0.2,
+		stroke: this.colourVal_,
+		strokeWidth: 0.0005,
 		visible: false        
 	});
 	_layer.add(this.circle_);	
@@ -100,17 +66,75 @@ ItemPoint.prototype.init = function(_overlay, _layer) {
 ItemPoint.prototype.showCircle = function(){
 	this.circle_.show();
 }
+ItemPoint.prototype.showMarker = function(){
+	this.marker_.setVisible(true);
+}
+ItemPoint.prototype.hideCircle = function(){
+	this.circle_.hide();
+}
+ItemPoint.prototype.hideMarker = function(){
+	this.marker_.setVisible(false);
+}
 
 ItemPoint.prototype.setColour = function(_colour){
 	
 }
 
 ItemPoint.prototype.setRadius = function(_radius){
-
+	this.circle_.setAttr('radius', _radius);	
 }
 
 // Game class
 function Game(_url){
+
+this.catInfo_ = {
+	'RESTAURANT' : {
+		'colour' : 'red',
+		'colourVal' : '#FF0000',
+		'icon' : 'http://maps.google.com/intl/en_us/mapfiles/ms/micons/red.png',
+	},
+	'ATTRACTION' : {
+		'colour' : 'green',
+		'colourVal' : '#00FF00',
+		'icon' : 'http://maps.google.com/intl/en_us/mapfiles/ms/micons/green.png',
+	},
+	'ACCOM' : {
+		'colour' : 'blue',
+		'colourVal' : '#0000FF',		
+		'icon' : 'http://maps.google.com/intl/en_us/mapfiles/ms/micons/blue.png',
+	},
+	'EVENT' : {
+		'colour' : 'purple',
+		'colourVal' : '#9000ff',
+		'icon' : 'http://maps.google.com/intl/en_us/mapfiles/ms/micons/purple.png',
+	},
+	'TOUR' : {
+		'colour' : 'orange',
+		'colourVal' : '#ffa800',
+		'icon' : 'http://maps.google.com/intl/en_us/mapfiles/ms/micons/orange.png',
+	},
+	'JOURNEY' : {
+		'colour' : 'yellow',
+		'colourVal' : '#FFFF00',
+		'icon' : 'http://maps.google.com/intl/en_us/mapfiles/ms/micons/yellow.png',
+	},
+	/*'HIRE' : {
+
+	},
+	
+	'INFO' : {
+
+	},
+	'DESTINFO' : {
+
+	},
+	'TRANSPORT' : {
+
+	}*/
+};
+
+	this.curSelection_ = null;
+	this.stage_ = null;
 
 	this.data_ = null;
 	var that = this;
@@ -135,13 +159,13 @@ function Game(_url){
 
 		var locs = products[i]['nearestLocation'].split(',');		
 
-		var info = catInfo[products[i]['productCategoryId']];
+		var info = this.catInfo_[products[i]['productCategoryId']];
 		if(info){
 
 			var point = new ItemPoint(this, products[i],
 				{ lat: locs[0], lng: locs[1],
 				  catinfo: info,
-				  radius: 0.0002,
+				  radius: 0.007,
 				});
 
 			// add to the correct layer
@@ -162,15 +186,43 @@ Game.prototype.getData = function(){
 
 Game.prototype.load = function(_overlay) {
 
-	var stage = _overlay.getStage();
+	this.stage_ = _overlay.getStage();
 	var layer = new Kinetic.Layer();
-	stage.add(layer);
+	this.stage_.add(layer);
 
 	for(var i=0;i<this.markerList_.length;i++){
 		this.markerList_[i].init(_overlay, layer);
 		if(i==0){
 			this.markerList_[i].showMarker();
 			this.markerList_[i].showCircle();
+			this.curSelection_ = this.markerList_[i];
 		}		
 	}
+}
+
+Game.prototype.sliderChanged = function(_value){
+	if(!this.curSelection_){
+		return;
+	}
+
+	this.curSelection_.setRadius(_value);
+
+	// need to calculate which points to show within the radius
+	// get position and radius information
+	var pos = this.curSelection_.latlong_;	
+	
+	for(var i=0;i<this.markerList_.length;i++){
+
+		var target = this.markerList_[i].latlong_;
+
+		var dist = google.maps.geometry.spherical.computeDistanceBetween(pos, target);
+		
+		if(dist < _value * 10000){
+			this.markerList_[i].showMarker();
+		}else{
+			this.markerList_[i].hideMarker();
+		}				
+	}
+
+	this.stage_.draw();
 }

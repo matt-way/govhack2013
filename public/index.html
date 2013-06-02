@@ -8,13 +8,15 @@
 	<title>Travelhackz - travel rewarded beyond your destinations</title>
 	<link rel="stylesheet" type="text/css" href="./css/styles.css">
 	<link rel="stylesheet" type="text/css" href="./lib/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="./lib/slider/css/slider.css">
 	<script src='./lib/jquery/jquery-2.0.2.min.js'></script>
-	<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCMQz_83Fc27KHZDyJWecP6_lMTIkUfRAY&sensor=false"></script>
+	<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCMQz_83Fc27KHZDyJWecP6_lMTIkUfRAY&sensor=false&libraries=geometry"></script>
 	<script src="./js/KineticGMapOverlay.js"></script>
 	<script type="text/javascript" src='./lib/kineticjs/kinetic-v4.5.2.js'></script>
 	<script type="text/javascript" src="./lib/angular/angular.js"></script>
 	<script type="text/javascript" src='./js/game.js'></script>
 	<script type="text/javascript" src='./lib/bootstrap/js/bootstrap.min.js'></script>
+	<script type="text/javascript" src='./lib/slider/js/bootstrap-slider.js'></script>
 	<script>
 	// the kinetic overlay	
 	var overlay;   
@@ -28,7 +30,7 @@
         // initialize the map
         var mapOptions = {
         	zoom: 15,
-        	center: new google.maps.LatLng(-27.473628,153.027062),
+        	center: new google.maps.LatLng(-27.477407093,153.029079437),
         	mapTypeId: google.maps.MapTypeId.ROADMAP,
         	disableDefaultUI: true,
         };
@@ -37,6 +39,10 @@
         
         // create the overlay
         overlay = new KineticGMapOverlay(map, ready);
+
+        $('#radslider').slider().on('slide', function(ev){
+       		myGame.sliderChanged(ev.value);
+        });
     }
 
     // called once the overlay is built so that objects can be added
@@ -50,16 +56,20 @@
 <body>
 	<div class="page-header">
   <h1>TravelHackz <small>Journey your reward</small></h1>
-<input type="text" data-provide="typeahead">
-<div class="dropdown">
-  <a class="dropdown-toggle" data-toggle="dropdown" href="#">Dropdown trigger</a>
-  <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+
+</div>
+
+	<div class="well" id="itin">
+	<ul class="nav nav-list">
+  <li class="nav-header">Itinerary</li>
+  <li class="active"><a href="#">Item 1</a></li>
+  <li><a href="#">Item 2</a></li>
+  <li><a href="#">Item 3</a></li>
+  <li><a href="#">Item 4</a></li>
   </ul>
-</div>
 
 
-</div>
-	
+	</div>	
 	
 	<aside id="sidebar">
 		
@@ -74,7 +84,7 @@
   <li><a href="#">Events</a></li>
   <li><a href="#">Tour</a></li>
 </ul>
-
+<input id='radslider' type="text" class="span2" value="" data-slider-min="0.001" data-slider-max="0.03" data-slider-step="0.0005" data-slider-value="0.007" data-slider-orientation="horizontal" data-slider-selection="after"data-slider-tooltip="hide">
 	</aside>
 	<div id="map-div"></div><!--Body content-->  <!--Body content-->
 	
