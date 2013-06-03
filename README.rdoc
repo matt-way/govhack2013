@@ -2,6 +2,8 @@
 
 Govhack 2013 code for TravelHackz
 
-See the live demo based off Brisbane at: http://www.travelhackz.com/
+See the live demo based off Brisbane at: http://www.travelhackz.com
+
+Submission video here: http://www.youtube.com/watch?feature=player_embedded&v=V5MIPqkZIUI
 
 (c) The TravelHackz Team 2013 - All rights reserved
